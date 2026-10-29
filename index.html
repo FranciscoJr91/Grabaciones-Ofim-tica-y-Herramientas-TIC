@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Grabaciones de clases · Ofimática e IA</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#FFFCFB;--surface:#FFFFFF;--text:#1F1F1F;--muted:#5F6368;--line:#C2C3C8;--accent:#AF1C32;--accent-soft:#F7E8EC;--red:#AF1C32;--rose:#D96A7D;--teal:#2F5D73;--ok:#2F5D73;--ok-soft:#EAF1F4;color-scheme:light}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:900px;margin:0 auto;padding:24px 16px 48px}
+header{margin-bottom:20px;background:var(--surface);padding:24px;border:1px solid var(--line);border-top:8px solid var(--red);border-radius:12px}
+.eyebrow{margin:0 0 6px;font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+h1{font-size:clamp(1.5rem,4vw,2.1rem);margin:0 0 6px;line-height:1.2;color:var(--red)}
+header p:last-child{margin:0;color:var(--muted)}
+.tools{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 8px}
+.tools input{flex:1 1 220px;padding:10px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--text);font:inherit}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--text);padding:7px 14px;border-radius:999px;cursor:pointer;font:inherit;font-size:.9rem}
+.chip:hover{border-color:var(--rose)}
+.chip[aria-pressed="true"]{background:var(--red);border-color:var(--red);color:#fff}
+.progress{font-size:.9rem;color:var(--muted);margin:10px 0 4px}
+.bar{height:6px;background:var(--line);border-radius:6px;overflow:hidden;margin-bottom:8px}
+.bar i{display:block;height:100%;width:0;background:var(--red);transition:width .3s}
+h2{font-size:1.1rem;margin:28px 0 10px;border-left:5px solid var(--rose);padding-left:10px;color:var(--red);text-transform:uppercase;letter-spacing:.04em}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px}
+.card.seen{border-color:var(--ok)}
+.top{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px}
+.date{font-weight:700}
+.time{font-size:.85rem;color:var(--muted)}
+.tag{font-size:.78rem;padding:2px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.title{font-weight:600;margin:0 0 6px}
+details{margin:6px 0 12px;color:var(--muted);font-size:.93rem}
+summary{cursor:pointer;color:var(--teal)}
+details ul{margin:8px 0 0;padding-left:20px}
+.actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.btn{display:inline-block;background:var(--red);color:#fff;text-decoration:none;padding:9px 16px;border-radius:10px;font-weight:600;font-size:.95rem}
+.btn:hover{opacity:.9}
+.pending{color:var(--muted);font-size:.9rem;font-style:italic}
+.seenbtn{background:none;border:1px solid var(--line);color:var(--muted);padding:8px 12px;border-radius:10px;cursor:pointer;font:inherit;font-size:.85rem}
+.card.seen .seenbtn{background:var(--ok-soft);color:var(--ok);border-color:var(--ok)}
+.empty{text-align:center;color:var(--muted);padding:30px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<p class="eyebrow">Universidad Católica de Cuenca</p>
+<h1>Grabaciones de clases</h1>
+<p>Ofimática e Inteligencia Artificial · Acceso directo, sin necesidad de ingresar al EVEA</p>
+</header>
+<div class="tools">
+<input id="q" type="search" placeholder="Buscar por tema o fecha…" aria-label="Buscar">
+</div>
+<div class="chips" id="chips"></div>
+<div class="progress" id="prog"></div>
+<div class="bar"><i id="barfill"></i></div>
+<main id="list"></main>
+</div>
+<script>
+const D=[
+{b:"Bloque 1",date:"13/10/2026",time:"19h00 - 21h36",type:"Sesiones de clases",title:"Clase 1: Sílabo, diagnóstico e introducción a la ofimática y las TIC",items:["Socialización del Sílabo y Prueba de Diagnóstico","Unidad 1: Introducción a la ofimática y las TIC","1.1 Concepto e importancia · 1.2 Tipos de herramientas digitales · 1.3 Introducción a la IA en la ofimática","Tutoría para solucionar problemas de acceso a ERP, correo institucional y EVEA"],url:"https://cedia.zoom.us/rec/share/IcUyfrkBgSgLia3vGpgctaCWPp73QLSPTNGicrVOe-RPr-1K1xuu3grOn3IPrB90.xEI3vrSPjgTp3kEi",label:"Grabación Clase 1"},
+{b:"Bloque 1",date:"15/10/2026",time:"19h00 - 21h20",type:"Sesiones de clases",title:"Clase 2: Procesador de texto y presentaciones",items:["Procesador de texto","Formato profesional de documentos","Tablas, estilos y referencias","Uso de IA para redacción y corrección","Presentaciones digitales"],url:"https://cedia.zoom.us/rec/share/r6arXmCMZeQJuBJ8W1cYSG71OH_kilqiF-6daM1YFrgf3w1TDIQQZIUL9-aw_2_y.DOe_cjVcDVfX9bTc",label:"Grabación Clase 2"},
+{b:"Bloque 1",date:"16/10/2026",type:"Sesiones de tutoría asincrónica",title:"Tutoría: Documento en línea y taller colaborativo",items:["Crear un documento en línea","Taller colaborativo: formato profesional de documentos logísticos apoyado por IA"],url:"https://youtu.be/5MJ5yLcrJW0",label:"Grabación"},
+{b:"Bloque 1",date:"20/10/2026",time:"19h00 - 21h33",type:"Sesiones de clases",title:"Clase 3: Presentaciones digitales",items:["3.1 Diseño efectivo de diapositivas","3.2 Plantillas y recursos multimedia: plantillas profesionales, imágenes, íconos y videos, buenas prácticas","3.3 IA para generación de contenido visual: creación de imágenes, comunicación visual, evaluación crítica y ética","Tutoría: gestión de credenciales de correo institucional (estudiante Isaac Sotomayor)","Práctica 1: Diseño de una presentación corporativa de alto impacto asistida por IA · 10 puntos · Entrega: 21/10/2026"],url:"https://cedia.zoom.us/rec/share/PcjzqGYN99mnx9lNW4G-cr91vTXmtVAfWgrIt6mAPkbxc0DEra9gRygrbAsg8pIJ.TtM4GQL5L8QHfNXy",label:"Grabación Clase 3"},
+{b:"Bloque 2",date:"22/10/2026",type:"Sesiones de clases",title:"Clase 4: Hojas de cálculo (Excel o equivalente)",items:["Introducción a las hojas de cálculo para gestión y análisis de datos","Estructura básica: filas, columnas, celdas y hojas de trabajo","Uso en procesos logísticos y administrativos","1.1 Fórmulas básicas y funciones: operadores, funciones matemáticas y lógicas, cálculos financieros y organizacionales simples"],url:"https://cedia.zoom.us/rec/share/J4bIfLC9bRh_S0vZRtnzgbzSnWx77rNQF0DAOQ_beCkNzFMoo0kx2NXZokpb6IJ1.zx5ASnXy--k5J-Q2",label:"Grabación Clase 4"},
+{b:"Bloque 2",date:"23/10/2026",type:"Sesiones de tutoría asincrónica",title:"Tutoría: IA (métodos RAFA y CREAR) e Investigación Formativa",items:["Uso de la inteligencia artificial: método RAFA y método CREAR","A partir de 1 h 02 min: explicación del trabajo de Investigación Formativa y de las temáticas para resolver los casos propuestos"],url:"https://cedia.zoom.us/rec/share/m_0QAxMQyL55MoQGNHS20pkUXuVS7tS1_PtrTVaXax5DoCkAT4sPBxuq-zEjfyOF.8wU9Krx92I2zuduJ",label:"Grabación"},
+{b:"Bloque 2",date:"27/10/2026",type:"Sesiones de clases",title:"Clase 5: Excel, aplicación de un caso de estudio",items:["Tema Excel: aplicación de un caso de estudio"],url:"https://cedia.zoom.us/rec/share/pK-82_Bj2gIZJguAMivUMqe1xVKoot-a-VWG2KMXB3D66orD2PB0agDArsXjGpa5.0_sA2W4MEtxuoKKh",label:"Grabación Clase 5"},
+{b:"Bloque 2",date:"29/10/2026",type:"Sesiones de clases",title:"Clase 6",items:["Temática por definir"],url:null},
+{b:"Bloque 2",date:"30/10/2026",type:"Sesiones de tutoría asincrónica",title:"Tutoría",items:["Temática por definir"],url:null}
+];
+const types=["Todas",...new Set(D.map(d=>d.type))];
+let filter="Todas",seen={};
+try{seen=JSON.parse(localStorage.getItem("seen_rec2")||"{}")}catch(e){}
+const save=()=>{try{localStorage.setItem("seen_rec2",JSON.stringify(seen))}catch(e){}};
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const chips=document.getElementById("chips");
+function drawChips(){chips.innerHTML=types.map(t=>`<button class="chip" aria-pressed="${t===filter}" data-t="${esc(t)}">${esc(t)}</button>`).join("")}
+chips.onclick=e=>{const t=e.target.closest(".chip");if(t){filter=t.dataset.t;drawChips();render()}};
+document.getElementById("q").oninput=render;
+function render(){
+ const q=document.getElementById("q").value.toLowerCase().trim();
+ let html="",last="",n=0;
+ D.forEach((d,i)=>{
+  if(filter!=="Todas"&&d.type!==filter)return;
+  const text=(d.date+" "+d.title+" "+d.items.join(" ")+" "+d.type).toLowerCase();
+  if(q&&!text.includes(q))return;
+  n++;
+  if(d.b!==last){html+=`<h2>${d.b}</h2>`;last=d.b}
+  const link=d.url?`<a class="btn" href="${d.url}" target="_blank" rel="noopener noreferrer" data-i="${i}">▶ ${esc(d.label)}</a>`:`<span class="pending">Grabación aún no disponible</span>`;
+  html+=`<article class="card${seen[i]?" seen":""}"><div class="top"><span class="date">${d.date}</span>${d.time?`<span class="time">${d.time}</span>`:""}<span class="tag">${esc(d.type)}</span></div>
+  <p class="title">${esc(d.title)}</p>
+  <details><summary>Ver temática</summary><ul>${d.items.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></details>
+  <div class="actions">${link}${d.url?`<button class="seenbtn" data-s="${i}">${seen[i]?"✓ Vista":"Marcar como vista"}</button>`:""}</div></article>`;
+ });
+ document.getElementById("list").innerHTML=html||'<p class="empty">No se encontraron resultados.</p>';
+ const total=D.filter(d=>d.url).length,done=D.filter((d,i)=>d.url&&seen[i]).length;
+ document.getElementById("prog").textContent=`${done} de ${total} grabaciones vistas`;
+ document.getElementById("barfill").style.width=(total?done/total*100:0)+"%";
+}
+document.getElementById("list").onclick=e=>{
+ const s=e.target.closest("[data-s]"),a=e.target.closest("a[data-i]");
+ if(s){const i=s.dataset.s;seen[i]=!seen[i];save();render()}
+ else if(a){seen[a.dataset.i]=true;save();setTimeout(render,300)}
+};
+drawChips();render();
+</script>
+</body>
+</html>
